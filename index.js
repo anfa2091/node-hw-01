@@ -1,9 +1,10 @@
-const contactsModule = require("./contacts");
+const {Command } = require("commander");
+const contacts = require("./contacts");
 
-const { Command } = require("commander");
 const program = new Command();
+
 program
-  .option("-a, --action <type>", "choose action")
+  .option("-a, --action <type>","choose action: list, get -i, add -n -e -p, remove -i")
   .option("-i, --id <type>", "user id")
   .option("-n, --name <type>", "user name")
   .option("-e, --email <type>", "user email")
@@ -13,25 +14,25 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
+// TODO: refactorizar
 function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
-      contactsModule.listContacts().then((list) => console.table(list));
+        contacts.listContacts();// ...
       break;
+
     case "get":
-      // ... id
-      contactsModule.getContactById(id).then((data) => console.table(data));
+        contacts.getContactById(id);// ... id
       break;
+
     case "add":
-      contactsModule.addContact(name, email, phone).then((msg) => {
-        console.log(msg);
-      });
+        contacts.addContact(name, email, phone);// ... name email phone
       break;
+
     case "remove":
-      contactsModule.removeContact(id).then((msg) => {
-        console.log(msg);
-      });
+        contacts.removeContact(id);// ... id
       break;
+
     default:
       console.warn("\x1B[31m Unknown action type!");
   }
